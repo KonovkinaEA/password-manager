@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -47,7 +48,10 @@ fun ListTopAppBar(onUiAction: (ListUiAction) -> Unit) {
                     contentDescription = "Add new account button icon"
                 )
                 Spacer(modifier = Modifier.width(5.dp))
-                Text(text = "Add account")
+                Text(
+                    text = "Add account",
+                    style = MaterialTheme.typography.titleLarge
+                )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(

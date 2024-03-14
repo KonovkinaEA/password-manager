@@ -1,7 +1,7 @@
 package com.password.manager.data
 
 import com.password.manager.data.encryption.CryptoManager
-import com.password.manager.data.model.SiteAccount
+import com.password.manager.data.model.Account
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,8 +9,8 @@ import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(private val cryptoManager: CryptoManager) : Repository {
 
-    private val _accounts: MutableStateFlow<List<SiteAccount>> = MutableStateFlow(emptyList())
-    override val accounts: StateFlow<List<SiteAccount>>
+    private val _accounts: MutableStateFlow<List<Account>> = MutableStateFlow(emptyList())
+    override val accounts: StateFlow<List<Account>>
         get() = _accounts.asStateFlow()
 
     init {
@@ -26,35 +26,35 @@ class RepositoryImpl @Inject constructor(private val cryptoManager: CryptoManage
     override fun isMasterPasswordCorrect(password: String) = cryptoManager.checkSecretKey(password)
 
     private fun hardcodedAccounts() = listOf(
-        SiteAccount(
+        Account(
             url = "https://github.com/",
             iconUrl = "https://github.com/favicon.ico",
             login = "login",
-            encryptedPassword = cryptoManager.encrypt("12345") ?: ""
+            password = "12345"
         ),
-        SiteAccount(
+        Account(
             url = "https://vk.com/",
             iconUrl = "https://vk.com/favicon.ico",
             login = "login",
-            encryptedPassword = cryptoManager.encrypt("qwerty") ?: ""
+            password = "qwerty"
         ),
-        SiteAccount(
+        Account(
             url = "https://www.youtube.com/",
             iconUrl = "https://www.youtube.com/favicon.ico",
             login = "login",
-            encryptedPassword = cryptoManager.encrypt("0987654321") ?: ""
+            password = "0987654321"
         ),
-        SiteAccount(
+        Account(
             url = "https://drive.google.com/",
             iconUrl = "https://drive.google.com/favicon.ico",
             login = "login",
-            encryptedPassword = cryptoManager.encrypt("password") ?: ""
+            password = "password"
         ),
-        SiteAccount(
+        Account(
             url = "https://disk.yandex.ru/",
             iconUrl = "https://disk.yandex.ru/favicon.ico",
             login = "login",
-            encryptedPassword = cryptoManager.encrypt("werystrongpassword") ?: ""
+            password = "verystrongpassword"
         )
     )
 }

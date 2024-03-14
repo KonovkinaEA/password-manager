@@ -1,6 +1,5 @@
 package com.password.manager.ui.screens.start
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,12 +41,11 @@ fun StartScreenContent(state: StartScreenUiState, onUiAction: (StartUiAction) ->
     val errorMessage =
         if (!state.isMasterPasswordCorrect) "The password is incorrect. Try again" else ""
 
-    Scaffold { paddingValues ->
+    Scaffold(containerColor = ExtendedTheme.colors.backPrimary) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .background(color = ExtendedTheme.colors.backPrimary),
+                .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
             if (title != null && buttonText != null) {

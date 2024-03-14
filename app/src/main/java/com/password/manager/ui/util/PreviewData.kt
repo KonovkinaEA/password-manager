@@ -1,36 +1,36 @@
 package com.password.manager.ui.util
 
-import com.password.manager.data.model.SiteAccount
+import com.password.manager.data.model.Account
 
 val accounts = listOf(
-    SiteAccount(
+    Account(
         url = "https://github.com/",
         iconUrl = "https://github.com/favicon.ico",
         login = "login",
-        encryptedPassword = "12345"
+        password = "12345"
     ),
-    SiteAccount(
+    Account(
         url = "https://vk.com/",
         iconUrl = "https://vk.com/favicon.ico",
         login = "login",
-        encryptedPassword = "qwerty"
+        password = "qwerty"
     ),
-    SiteAccount(
+    Account(
         url = "https://www.youtube.com/",
         iconUrl = "https://www.youtube.com/favicon.ico",
         login = "login",
-        encryptedPassword = "0987654321"
+        password = "0987654321"
     ),
-    SiteAccount(
+    Account(
         url = "https://e.mail.ru/",
         iconUrl = "https://e.mail.ru/favicon.ico",
         login = "login",
-        encryptedPassword = "password"
+        password = "password"
     ),
-    SiteAccount(
+    Account(
         url = "https://disk.yandex.ru/",
         iconUrl = "https://disk.yandex.ru/favicon.ico",
         login = "login",
-        encryptedPassword = "werystrongpassword"
+        password = "werystrongpassword"
     )
 )

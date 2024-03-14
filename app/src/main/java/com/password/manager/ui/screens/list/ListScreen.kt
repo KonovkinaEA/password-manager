@@ -1,6 +1,5 @@
 package com.password.manager.ui.screens.list
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.password.manager.data.model.SiteAccount
+import com.password.manager.data.model.Account
 import com.password.manager.ui.screens.list.components.AccountCard
 import com.password.manager.ui.screens.list.components.ListTopAppBar
 import com.password.manager.ui.screens.list.model.ListUiAction
@@ -49,22 +48,20 @@ fun ListScreen(
 }
 
 @Composable
-private fun ListScreenContent(state: List<SiteAccount>, onUiAction: (ListUiAction) -> Unit) {
+private fun ListScreenContent(state: List<Account>, onUiAction: (ListUiAction) -> Unit) {
     Scaffold(
-        topBar = { ListTopAppBar(onUiAction) }
+        topBar = { ListTopAppBar(onUiAction) },
+        containerColor = ExtendedTheme.colors.backPrimary
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 10.dp)
-                .background(ExtendedTheme.colors.backPrimary),
+                .padding(horizontal = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item { Spacer(modifier = Modifier.height(5.dp)) }
-            items(state) {
-                AccountCard(it.url, it.iconUrl)
-            }
+            items(state) { AccountCard(it) }
             item { Spacer(modifier = Modifier.height(5.dp)) }
         }
     }
