@@ -19,7 +19,7 @@ fun AppNavHost(navController: NavHostController) {
             StartScreen(toNextScreen = { navController.navigate(List.route) })
         }
         composable(List.route) {
-            ListScreen()
+            ListScreen(addAccount = { /*TODO*/ }, editAccount = { /*TODO*/ })
         }
     }
 }
