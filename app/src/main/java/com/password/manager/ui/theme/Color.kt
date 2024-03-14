@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 val White = Color(0xFFFFFFFF)
 val Green = Color(0xFF34C759)
 val Red = Color(0xFFFF0000)
+val Blue = Color(0xFF007AFF)
 
 val LightSupportSeparator = Color(0x33000000)
 val LightSupportOverlay = Color(0x0F000000)

@@ -51,7 +51,7 @@ fun MasterPasswordCard(
             Text(
                 text = errorText,
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodySmall.copy(color = Red),
+                style = MaterialTheme.typography.bodyMedium.copy(color = Red),
                 modifier = Modifier
                     .height(30.dp)
                     .wrapContentHeight()

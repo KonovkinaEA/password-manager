@@ -1,11 +1,11 @@
 package com.password.manager.ui.screens.start
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,8 +20,12 @@ import com.password.manager.ui.theme.PasswordManagerTheme
 import com.password.manager.ui.theme.ThemeModePreview
 
 @Composable
-fun StartScreen(viewModel: StartViewModel = hiltViewModel()) {
+fun StartScreen(toNextScreen: () -> Unit, viewModel: StartViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.successfulEntry.collect { toNextScreen() }
+    }
 
     StartScreenContent(state, viewModel::onUiAction)
 }
@@ -37,12 +41,11 @@ fun StartScreenContent(state: StartScreenUiState, onUiAction: (StartUiAction) ->
     val errorMessage =
         if (!state.isMasterPasswordCorrect) "The password is incorrect. Try again" else ""
 
-    Scaffold { paddingValues ->
+    Scaffold(containerColor = ExtendedTheme.colors.backPrimary) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .background(color = ExtendedTheme.colors.backPrimary),
+                .padding(paddingValues),
             contentAlignment = Alignment.Center
         ) {
             if (title != null && buttonText != null) {

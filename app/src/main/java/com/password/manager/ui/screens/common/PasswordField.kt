@@ -60,9 +60,11 @@ fun PasswordField(hint: String, buttonText: String, onButtonClick: (String) -> U
                     )
                 )
             },
-            colors = OutlinedTextFieldDefaults.colors().copy(
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = ExtendedTheme.colors.labelTertiary,
+                unfocusedBorderColor = ExtendedTheme.colors.labelTertiary,
                 focusedContainerColor = ExtendedTheme.colors.backSecondary,
-                unfocusedContainerColor = ExtendedTheme.colors.backSecondary
+                unfocusedContainerColor = ExtendedTheme.colors.backSecondary,
             ),
             trailingIcon = {
                 IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
@@ -82,7 +84,7 @@ fun PasswordField(hint: String, buttonText: String, onButtonClick: (String) -> U
         Spacer(modifier = Modifier.height(10.dp))
         Button(
             onClick = { onButtonClick(password) },
-            colors = ButtonDefaults.buttonColors().copy(
+            colors = ButtonDefaults.buttonColors(
                 containerColor = Green,
                 disabledContainerColor = ExtendedTheme.colors.backSecondary
             ),
