@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,8 +21,12 @@ import com.password.manager.ui.theme.PasswordManagerTheme
 import com.password.manager.ui.theme.ThemeModePreview
 
 @Composable
-fun StartScreen(viewModel: StartViewModel = hiltViewModel()) {
+fun StartScreen(toNextScreen: () -> Unit, viewModel: StartViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.successfulEntry.collect { toNextScreen() }
+    }
 
     StartScreenContent(state, viewModel::onUiAction)
 }
