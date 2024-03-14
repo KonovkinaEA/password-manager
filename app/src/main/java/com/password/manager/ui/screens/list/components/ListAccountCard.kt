@@ -79,7 +79,7 @@ private fun LoginPasswordPart(login: String, password: String) {
             .fillMaxWidth()
             .padding(horizontal = 15.dp)
             .padding(bottom = 15.dp),
-        colors = CardDefaults.cardColors().copy(
+        colors = CardDefaults.cardColors(
             containerColor = ExtendedTheme.colors.supportOverlay,
             contentColor = ExtendedTheme.colors.labelTertiary
         )
@@ -94,15 +94,18 @@ private fun LoginPasswordPart(login: String, password: String) {
                 contentDescription = "Account icon"
             )
             Spacer(modifier = Modifier.width(10.dp))
-            SelectionContainer {
-                Column {
+
+            Column {
+                SelectionContainer {
                     Text(
                         text = login,
                         style = MaterialTheme.typography.titleMedium.copy(
                             color = ExtendedTheme.colors.labelSecondary
                         )
                     )
-                    Spacer(modifier = Modifier.height(5.dp))
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+                SelectionContainer {
                     Text(
                         text = password,
                         style = MaterialTheme.typography.titleMedium.copy(

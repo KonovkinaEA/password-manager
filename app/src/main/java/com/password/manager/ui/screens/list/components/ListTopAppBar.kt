@@ -35,7 +35,7 @@ fun ListTopAppBar(onUiAction: (ListUiAction) -> Unit) {
         title = {},
         navigationIcon = {
             TextButton(
-                colors = ButtonDefaults.buttonColors().copy(
+                colors = ButtonDefaults.buttonColors(
                     containerColor = Blue,
                     contentColor = White
                 ),
