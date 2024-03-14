@@ -19,30 +19,29 @@ class CryptoManager {
 
     private var secretKey: Key? = null
 
+    fun isSecretKeySet() = ks.size() != 0
+
+    fun setNewSecretKey(alias: String) {
+        val keyGen = KeyGenerator.getInstance(ALGORITHM)
+        keyGen.init(256)
+
+        val key: SecretKey = keyGen.generateKey()
+        val entry = KeyStore.SecretKeyEntry(key)
+        val protectionParameter =
+            KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
+                .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+                .build()
+
+        ks.setEntry(alias, entry, protectionParameter)
+        secretKey = ks.getKey(alias, null)
+    }
+
     fun checkSecretKey(alias: String): Boolean {
-        if (ks.size() == 0) {
-
-            val keyGen = KeyGenerator.getInstance(ALGORITHM)
-            keyGen.init(256)
-
-            val key: SecretKey = keyGen.generateKey()
-            val entry = KeyStore.SecretKeyEntry(key)
-            val protectionParameter =
-                KeyProtection.Builder(KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
-                    .build()
-
-            ks.setEntry(alias, entry, protectionParameter)
+        if (ks.containsAlias(alias)) {
             secretKey = ks.getKey(alias, null)
 
             return true
-        } else {
-            if (ks.containsAlias(alias)) {
-                secretKey = ks.getKey(alias, null)
-
-                return true
-            }
         }
 
         return false
