@@ -22,7 +22,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.password.manager.ui.theme.PasswordmanagerTheme
+import com.password.manager.data.encryption.CryptoManager
+import com.password.manager.ui.theme.PasswordManagerTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +32,7 @@ class MainActivity : ComponentActivity() {
         val cryptoManager = CryptoManager()
 
         setContent {
-            PasswordmanagerTheme {
+            PasswordManagerTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
