@@ -1,4 +1,4 @@
-package com.password.manager
+package com.password.manager.data.encryption
 
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
