@@ -2,9 +2,11 @@ package com.password.manager.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.password.manager.ui.screens.account.AccountScreen
 import com.password.manager.ui.screens.list.ListScreen
 import com.password.manager.ui.screens.start.StartScreen
 
@@ -19,7 +21,24 @@ fun AppNavHost(navController: NavHostController) {
             StartScreen(toNextScreen = { navController.navigate(List.route) })
         }
         composable(List.route) {
-            ListScreen(addAccount = { /*TODO*/ }, editAccount = { /*TODO*/ })
+            ListScreen(
+                addAccount = { navController.navigate(Account.route) },
+                editAccount = navController::navigateToAccount
+            )
+        }
+        composable(Account.route) {
+            AccountScreen(onScreenClose = {
+                navController.navigate(List.route) { popUpTo(List.route) { inclusive = true } }
+            })
+        }
+        composable(Account.routeWithArgs, arguments = Account.arguments) {
+            AccountScreen(onScreenClose = {
+                navController.navigate(List.route) { popUpTo(List.route) { inclusive = true } }
+            })
         }
     }
+}
+
+private fun NavController.navigateToAccount(id: String = "") {
+    this.navigate(Account.navToOrderWithArgs(id))
 }
