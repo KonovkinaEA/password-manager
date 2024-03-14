@@ -28,7 +28,7 @@ class StartViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            _uiState.update { StartScreenUiState(repository.masterPasswordSet) }
+            _uiState.update { StartScreenUiState(repository.isMasterPasswordSet()) }
         }
     }
 
@@ -36,7 +36,7 @@ class StartViewModel @Inject constructor(
         when (action) {
             is StartUiAction.EnterMasterPassword -> {
                 viewModelScope.launch(ioDispatcher) {
-                    if (repository.masterPasswordSet) {
+                    if (repository.isMasterPasswordSet()) {
                         val correct = repository.isMasterPasswordCorrect(action.password)
                         _uiState.update { uiState.value.copy(isMasterPasswordCorrect = correct) }
 
