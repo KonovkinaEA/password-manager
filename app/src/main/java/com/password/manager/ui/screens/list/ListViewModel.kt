@@ -3,7 +3,7 @@ package com.password.manager.ui.screens.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.password.manager.data.Repository
-import com.password.manager.data.model.Account
+import com.password.manager.data.model.AccountData
 import com.password.manager.ui.screens.list.model.ListUiAction
 import com.password.manager.ui.screens.list.model.ListUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ class ListViewModel @Inject constructor(
     repository: Repository
 ) : ViewModel() {
 
-    val uiState: StateFlow<List<Account>> = repository.accounts
+    val uiState: StateFlow<List<AccountData>> = repository.accounts
 
     private val _uiEvent = Channel<ListUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()

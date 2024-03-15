@@ -38,11 +38,14 @@ import com.password.manager.ui.theme.ThemeModePreview
 import com.password.manager.ui.theme.White
 
 @Composable
-fun PasswordField(hint: String, buttonText: String, onButtonClick: (String) -> Unit) {
-    var password by remember { mutableStateOf("") }
-    var passwordVisibility by remember { mutableStateOf(false) }
-
-    val icon = if (passwordVisibility) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+fun BaseInputField(
+    hint: String,
+    buttonText: String,
+    visualTransformation: Boolean,
+    onButtonClick: (String) -> Unit
+) {
+    var value by remember { mutableStateOf("") }
+    var valueVisibility by remember { mutableStateOf(false) }
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,8 +53,8 @@ fun PasswordField(hint: String, buttonText: String, onButtonClick: (String) -> U
     ) {
         OutlinedTextField(
             shape = RoundedCornerShape(5.dp),
-            value = password,
-            onValueChange = { password = it },
+            value = value,
+            onValueChange = { value = it },
             placeholder = {
                 Text(
                     text = hint,
@@ -67,31 +70,40 @@ fun PasswordField(hint: String, buttonText: String, onButtonClick: (String) -> U
                 unfocusedContainerColor = ExtendedTheme.colors.backSecondary,
             ),
             trailingIcon = {
-                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = "Visibility icon",
-                        tint = ExtendedTheme.colors.labelSecondary
-                    )
+                if (visualTransformation) {
+                    val icon = if (valueVisibility) {
+                        Icons.Filled.Visibility
+                    } else {
+                        Icons.Filled.VisibilityOff
+                    }
+                    IconButton(onClick = { valueVisibility = !valueVisibility }) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = "Visibility icon",
+                            tint = ExtendedTheme.colors.labelSecondary
+                        )
+                    }
                 }
             },
-            visualTransformation = if (passwordVisibility) {
-                VisualTransformation.None
-            } else {
+            visualTransformation = if (visualTransformation && !valueVisibility) {
                 PasswordVisualTransformation()
+            } else {
+                VisualTransformation.None
             }
         )
+
         Spacer(modifier = Modifier.height(10.dp))
+
         Button(
-            onClick = { onButtonClick(password) },
+            onClick = { onButtonClick(value) },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Green,
                 disabledContainerColor = ExtendedTheme.colors.backSecondary
             ),
-            enabled = password.isNotEmpty(),
+            enabled = value.isNotEmpty(),
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(5.dp),
-            border = if (password.isEmpty()) {
+            border = if (value.isEmpty()) {
                 BorderStroke(width = 1.dp, color = ExtendedTheme.colors.labelTertiary)
             } else {
                 null
@@ -100,7 +112,7 @@ fun PasswordField(hint: String, buttonText: String, onButtonClick: (String) -> U
             Text(
                 text = buttonText,
                 style = MaterialTheme.typography.bodyLarge.copy(
-                    color = if (password.isEmpty()) ExtendedTheme.colors.labelTertiary else White
+                    color = if (value.isEmpty()) ExtendedTheme.colors.labelTertiary else White
                 )
             )
         }
@@ -113,6 +125,11 @@ private fun PasswordFieldPreview(
     @PreviewParameter(ThemeModePreview::class) darkTheme: Boolean
 ) {
     PasswordManagerTheme(darkTheme = darkTheme) {
-        PasswordField(hint = "Password", buttonText = "Unlock", onButtonClick = {})
+        BaseInputField(
+            hint = "Password",
+            buttonText = "Unlock",
+            visualTransformation = true,
+            onButtonClick = {}
+        )
     }
 }

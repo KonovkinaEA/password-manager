@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.password.manager.ui.screens.common.PasswordField
+import com.password.manager.ui.screens.common.BaseInputField
 import com.password.manager.ui.screens.start.model.StartUiAction
 import com.password.manager.ui.theme.ExtendedTheme
 import com.password.manager.ui.theme.PasswordManagerTheme
@@ -56,9 +56,14 @@ fun MasterPasswordCard(
                     .height(30.dp)
                     .wrapContentHeight()
             )
-            PasswordField(hint = "Master password", buttonText = buttonText, onButtonClick = {
-                onUiAction(StartUiAction.EnterMasterPassword(it))
-            })
+            BaseInputField(
+                hint = "Master password",
+                buttonText = buttonText,
+                visualTransformation = true,
+                onButtonClick = {
+                    onUiAction(StartUiAction.EnterMasterPassword(it))
+                }
+            )
         }
     }
 }
