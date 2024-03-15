@@ -28,6 +28,10 @@ class RepositoryImpl @Inject constructor(private val cryptoManager: CryptoManage
 
     override suspend fun getAccountData(id: String) = _accounts.value.firstOrNull { it.id == id }
 
+    override suspend fun saveAccountData(accountData: AccountData) {
+        // TODO
+    }
+
     private fun hardcodedAccounts() = listOf(
         AccountData(
             url = "https://github.com/",

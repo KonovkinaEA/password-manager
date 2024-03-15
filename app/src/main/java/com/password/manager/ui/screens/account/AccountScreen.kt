@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.password.manager.data.model.AccountData
 import com.password.manager.ui.screens.account.components.AccountBaseCard
+import com.password.manager.ui.screens.account.components.AccountsTopAppBar
+import com.password.manager.ui.screens.account.model.AccountUiAction
 import com.password.manager.ui.screens.common.BaseInputField
 import com.password.manager.ui.theme.ExtendedTheme
 import com.password.manager.ui.theme.PasswordManagerTheme
@@ -32,12 +35,19 @@ import com.password.manager.ui.util.accounts
 fun AccountScreen(onScreenClose: () -> Unit, viewModel: AccountViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
 
-    AccountScreenContent(state, onScreenClose)
+    LaunchedEffect(Unit) {
+        viewModel.closeScreen.collect { if (it) onScreenClose() }
+    }
+
+    AccountScreenContent(state, viewModel::onUiAction)
 }
 
 @Composable
-private fun AccountScreenContent(state: AccountData, onScreenClose: () -> Unit) {
-    Scaffold(containerColor = ExtendedTheme.colors.backPrimary) { paddingValues ->
+private fun AccountScreenContent(state: AccountData, onUiAction: (AccountUiAction) -> Unit) {
+    Scaffold(
+        topBar = { AccountsTopAppBar(state.id, onUiAction) },
+        containerColor = ExtendedTheme.colors.backPrimary
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -86,6 +96,6 @@ private fun AccountScreenPreview(
     @PreviewParameter(ThemeModePreview::class) darkTheme: Boolean
 ) {
     PasswordManagerTheme(darkTheme = darkTheme) {
-        AccountScreenContent(state = accounts.first(), onScreenClose = {})
+        AccountScreenContent(state = accounts.first()) {}
     }
 }

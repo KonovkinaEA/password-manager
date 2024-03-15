@@ -9,4 +9,5 @@ interface Repository {
     suspend fun setMasterPassword(password: String)
     suspend fun isMasterPasswordCorrect(password: String): Boolean
     suspend fun getAccountData(id: String): AccountData?
+    suspend fun saveAccountData(accountData: AccountData)
 }
