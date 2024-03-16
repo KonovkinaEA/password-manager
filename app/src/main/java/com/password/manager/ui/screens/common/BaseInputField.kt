@@ -49,6 +49,8 @@ fun BaseInputField(
             )
         },
         colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = ExtendedTheme.colors.labelPrimary,
+            unfocusedTextColor = ExtendedTheme.colors.labelPrimary,
             focusedBorderColor = ExtendedTheme.colors.labelTertiary,
             unfocusedBorderColor = ExtendedTheme.colors.labelTertiary,
             focusedContainerColor = ExtendedTheme.colors.backSecondary,

@@ -28,7 +28,7 @@ import com.password.manager.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountsTopAppBar(id: String, onUiAction: (AccountUiAction) -> Unit) {
+fun AccountsTopAppBar(onUiAction: (AccountUiAction) -> Unit) {
     TopAppBar(
         modifier = Modifier.shadow(10.dp),
         title = {},
@@ -69,6 +69,6 @@ private fun TopAppBarPreview(
     @PreviewParameter(ThemeModePreview::class) darkTheme: Boolean
 ) {
     PasswordManagerTheme(darkTheme = darkTheme) {
-        AccountsTopAppBar(id = "id", onUiAction = {})
+        AccountsTopAppBar(onUiAction = {})
     }
 }

@@ -44,10 +44,13 @@ fun AccountCard(state: AccountData, onEditClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(15.dp)
         ) {
+            val defaultIcon = painterResource(id = R.drawable.baseline_cookie_24)
             AsyncImage(
                 model = state.iconUrl,
                 contentDescription = "Site icon",
-                placeholder = painterResource(id = R.drawable.baseline_cookie_24),
+                placeholder = defaultIcon,
+                error = defaultIcon,
+                fallback = defaultIcon,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(10.dp))

@@ -46,7 +46,7 @@ fun AccountScreen(onScreenClose: () -> Unit, viewModel: AccountViewModel = hiltV
 @Composable
 private fun AccountScreenContent(state: AccountData, onUiAction: (AccountUiAction) -> Unit) {
     Scaffold(
-        topBar = { AccountsTopAppBar(state.id, onUiAction) },
+        topBar = { AccountsTopAppBar(onUiAction) },
         containerColor = ExtendedTheme.colors.backPrimary
     ) { paddingValues ->
         Column(

@@ -46,7 +46,7 @@ class AccountViewModel @Inject constructor(
                 _closeScreen.send(true)
             }
             AccountUiAction.SaveAccount -> viewModelScope.launch(ioDispatcher) {
-//                repository.saveAccountData() TODO
+                repository.saveAccountData(_uiState.value)
                 _closeScreen.send(true)
             }
             is AccountUiAction.UpdateWebsite -> viewModelScope.launch(ioDispatcher) {
