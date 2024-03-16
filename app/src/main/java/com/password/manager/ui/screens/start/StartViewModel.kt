@@ -16,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StartViewModel @Inject constructor(
-    private val ioDispatcher: CoroutineDispatcher,
-    private val repository: Repository
+    private val ioDispatcher: CoroutineDispatcher, private val repository: Repository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(StartScreenUiState())
@@ -27,33 +26,37 @@ class StartViewModel @Inject constructor(
     val successfulEntry = _successfulEntry.receiveAsFlow()
 
     init {
-        viewModelScope.launch(ioDispatcher) {
-            _uiState.update { StartScreenUiState(repository.isMasterPasswordSet()) }
+        viewModelScope.launch {
+            _uiState.update {
+                StartScreenUiState(isMasterPasswordSet = repository.isMasterPasswordSet())
+            }
         }
     }
 
     fun onUiAction(action: StartUiAction) {
         when (action) {
-            is StartUiAction.EnterMasterPassword -> {
-                viewModelScope.launch(ioDispatcher) {
-                    if (repository.isMasterPasswordSet()) {
-                        val correct = repository.isMasterPasswordCorrect(action.password)
-                        _uiState.update { uiState.value.copy(isMasterPasswordCorrect = correct) }
+            is StartUiAction.EnterMasterPassword -> viewModelScope.launch(ioDispatcher) {
+                if (repository.isMasterPasswordSet()) {
+                    val correct = repository.isMasterPasswordCorrect(action.password)
+                    _uiState.update { uiState.value.copy(isMasterPasswordCorrect = correct) }
 
-                        if (correct) {
-                            _successfulEntry.send(true)
-                        }
-                    } else {
-                        repository.setMasterPassword(action.password)
+                    if (correct) {
                         _successfulEntry.send(true)
                     }
+                } else {
+                    repository.setMasterPassword(action.password)
+                    _successfulEntry.send(true)
                 }
+            }
+            is StartUiAction.UpdateMasterPassword -> viewModelScope.launch {
+                _uiState.update { uiState.value.copy(masterPassword = action.text) }
             }
         }
     }
 }
 
 data class StartScreenUiState(
+    val masterPassword: String = "",
     val isMasterPasswordSet: Boolean? = null,
     val isMasterPasswordCorrect: Boolean = true
 )

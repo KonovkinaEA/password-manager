@@ -55,8 +55,7 @@ fun ListTopAppBar(onUiAction: (ListUiAction) -> Unit) {
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = ExtendedTheme.colors.backPrimary,
-            actionIconContentColor = ExtendedTheme.colors.labelPrimary
+            containerColor = ExtendedTheme.colors.backSecondary
         )
     )
 }

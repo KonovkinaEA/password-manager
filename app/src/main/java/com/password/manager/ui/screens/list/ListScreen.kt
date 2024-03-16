@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.password.manager.data.model.Account
+import com.password.manager.data.model.AccountData
 import com.password.manager.ui.screens.list.components.AccountCard
 import com.password.manager.ui.screens.list.components.ListTopAppBar
 import com.password.manager.ui.screens.list.model.ListUiAction
@@ -48,7 +48,7 @@ fun ListScreen(
 }
 
 @Composable
-private fun ListScreenContent(state: List<Account>, onUiAction: (ListUiAction) -> Unit) {
+private fun ListScreenContent(state: List<AccountData>, onUiAction: (ListUiAction) -> Unit) {
     Scaffold(
         topBar = { ListTopAppBar(onUiAction) },
         containerColor = ExtendedTheme.colors.backPrimary
@@ -61,7 +61,11 @@ private fun ListScreenContent(state: List<Account>, onUiAction: (ListUiAction) -
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             item { Spacer(modifier = Modifier.height(5.dp)) }
-            items(state) { AccountCard(it) }
+            items(state) {
+                AccountCard(state = it, onEditClick = {
+                    onUiAction(ListUiAction.EditAccount(it.id))
+                })
+            }
             item { Spacer(modifier = Modifier.height(5.dp)) }
         }
     }

@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.password.manager.ui.screens.start.components.MasterPasswordCard
 import com.password.manager.ui.screens.start.model.StartUiAction
@@ -31,7 +32,7 @@ fun StartScreen(toNextScreen: () -> Unit, viewModel: StartViewModel = hiltViewMo
 }
 
 @Composable
-fun StartScreenContent(state: StartScreenUiState, onUiAction: (StartUiAction) -> Unit) {
+private fun StartScreenContent(state: StartScreenUiState, onUiAction: (StartUiAction) -> Unit) {
     val isMasterPasswordSet = state.isMasterPasswordSet
     val (title, buttonText) = when (isMasterPasswordSet) {
         true -> "The vault is closed.\nEnter the master password" to "Unlock"
@@ -45,11 +46,18 @@ fun StartScreenContent(state: StartScreenUiState, onUiAction: (StartUiAction) ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
+                .padding(15.dp),
             contentAlignment = Alignment.Center
         ) {
             if (title != null && buttonText != null) {
-                MasterPasswordCard(title, buttonText, errorMessage, onUiAction)
+                MasterPasswordCard(
+                    titleText = title,
+                    buttonText = buttonText,
+                    errorText = errorMessage,
+                    enteredPassword = state.masterPassword,
+                    onUiAction = onUiAction
+                )
             }
         }
     }
@@ -62,7 +70,7 @@ private fun StartScreenPreview(
 ) {
     PasswordManagerTheme(darkTheme = darkTheme) {
         StartScreenContent(
-            state = StartScreenUiState(true),
+            state = StartScreenUiState(isMasterPasswordSet = true),
             onUiAction = {}
         )
     }
