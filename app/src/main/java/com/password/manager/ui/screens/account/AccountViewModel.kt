@@ -45,9 +45,18 @@ class AccountViewModel @Inject constructor(
             AccountUiAction.CloseAccount -> viewModelScope.launch(ioDispatcher) {
                 _closeScreen.send(true)
             }
-            is AccountUiAction.SaveAccount -> viewModelScope.launch(ioDispatcher) {
+            AccountUiAction.SaveAccount -> viewModelScope.launch(ioDispatcher) {
 //                repository.saveAccountData() TODO
                 _closeScreen.send(true)
+            }
+            is AccountUiAction.UpdateWebsite -> viewModelScope.launch(ioDispatcher) {
+                _uiState.update { uiState.value.copy(url = action.website) }
+            }
+            is AccountUiAction.UpdateLogin -> viewModelScope.launch(ioDispatcher) {
+                _uiState.update { uiState.value.copy(login = action.login) }
+            }
+            is AccountUiAction.UpdatePassword -> viewModelScope.launch(ioDispatcher) {
+                _uiState.update { uiState.value.copy(password = action.password) }
             }
         }
     }

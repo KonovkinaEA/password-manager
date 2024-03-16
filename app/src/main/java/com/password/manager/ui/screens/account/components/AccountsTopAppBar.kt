@@ -43,7 +43,7 @@ fun AccountsTopAppBar(id: String, onUiAction: (AccountUiAction) -> Unit) {
         },
         actions = {
             TextButton(
-                onClick = { onUiAction(AccountUiAction.SaveAccount(id)) },
+                onClick = { onUiAction(AccountUiAction.SaveAccount) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Green,
                     contentColor = White

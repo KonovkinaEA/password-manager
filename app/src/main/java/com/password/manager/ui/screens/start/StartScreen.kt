@@ -51,7 +51,13 @@ private fun StartScreenContent(state: StartScreenUiState, onUiAction: (StartUiAc
             contentAlignment = Alignment.Center
         ) {
             if (title != null && buttonText != null) {
-                MasterPasswordCard(title, buttonText, errorMessage, onUiAction)
+                MasterPasswordCard(
+                    titleText = title,
+                    buttonText = buttonText,
+                    errorText = errorMessage,
+                    enteredPassword = state.masterPassword,
+                    onUiAction = onUiAction
+                )
             }
         }
     }
@@ -64,7 +70,7 @@ private fun StartScreenPreview(
 ) {
     PasswordManagerTheme(darkTheme = darkTheme) {
         StartScreenContent(
-            state = StartScreenUiState(true),
+            state = StartScreenUiState(isMasterPasswordSet = true),
             onUiAction = {}
         )
     }

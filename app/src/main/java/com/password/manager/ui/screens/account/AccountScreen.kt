@@ -26,6 +26,7 @@ import com.password.manager.ui.screens.account.components.AccountBaseCard
 import com.password.manager.ui.screens.account.components.AccountsTopAppBar
 import com.password.manager.ui.screens.account.model.AccountUiAction
 import com.password.manager.ui.screens.common.BaseInputField
+import com.password.manager.ui.screens.common.Parameter
 import com.password.manager.ui.theme.ExtendedTheme
 import com.password.manager.ui.theme.PasswordManagerTheme
 import com.password.manager.ui.theme.ThemeModePreview
@@ -52,41 +53,48 @@ private fun AccountScreenContent(state: AccountData, onUiAction: (AccountUiActio
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(10.dp)
+                .padding(15.dp)
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AccountBaseCard {
-                CardContent(title = "Website", hint = state.url, password = false)
+                CardContent(title = "Website", hint = state.url, parameter = Parameter.WEBSITE) {
+                    onUiAction(AccountUiAction.UpdateWebsite(it))
+                }
             }
             Spacer(modifier = Modifier.height(15.dp))
             AccountBaseCard {
-                CardContent(title = "Login", hint = state.login, password = false)
+                CardContent(title = "Login", hint = state.login, Parameter.LOGIN) {
+                    onUiAction(AccountUiAction.UpdateLogin(it))
+                }
             }
             Spacer(modifier = Modifier.height(15.dp))
             AccountBaseCard {
-                CardContent(title = "Password", hint = state.password, password = true)
+                CardContent(
+                    title = "Password", hint = state.password, parameter = Parameter.PASSWORD
+                ) {
+                    onUiAction(AccountUiAction.UpdatePassword(it))
+                }
             }
         }
     }
 }
 
 @Composable
-private fun CardContent(title: String, hint: String, password: Boolean) {
+private fun CardContent(
+    title: String, hint: String, parameter: Parameter, onValueChanged: (String) -> Unit
+) {
     Column(
         modifier = Modifier.padding(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge.copy(
+            text = title, style = MaterialTheme.typography.titleLarge.copy(
                 color = ExtendedTheme.colors.labelPrimary
             )
         )
-        BaseInputField(hint = hint, buttonText = "Update", visualTransformation = password) {
-            /*TODO*/
-        }
+        BaseInputField(hint = hint, parameter = parameter, onValueChanged = onValueChanged)
     }
 }
 

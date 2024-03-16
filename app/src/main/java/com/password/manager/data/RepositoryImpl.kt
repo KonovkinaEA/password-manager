@@ -5,6 +5,7 @@ import com.password.manager.data.model.AccountData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(private val cryptoManager: CryptoManager) : Repository {
@@ -29,7 +30,14 @@ class RepositoryImpl @Inject constructor(private val cryptoManager: CryptoManage
     override suspend fun getAccountData(id: String) = _accounts.value.firstOrNull { it.id == id }
 
     override suspend fun saveAccountData(accountData: AccountData) {
-        // TODO
+        _accounts.update { current ->
+            current.map {
+                when (it.id) {
+                    accountData.id -> accountData
+                    else -> it
+                }
+            }
+        }
     }
 
     private fun hardcodedAccounts() = listOf(
