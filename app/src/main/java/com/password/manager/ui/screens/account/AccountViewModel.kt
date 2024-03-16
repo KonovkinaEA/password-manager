@@ -24,7 +24,9 @@ class AccountViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(AccountData())
+    private var accountData: AccountData? = null
+
+    private val _uiState = MutableStateFlow(AccountUiState())
     val uiState = _uiState.asStateFlow()
 
     private val _closeScreen = Channel<Boolean>()
@@ -34,7 +36,13 @@ class AccountViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             savedStateHandle.get<String>(Account.id)?.let {
                 repository.getAccountData(it)?.let { account ->
-                    _uiState.update { account }
+                    _uiState.value = AccountUiState(
+                        isNewAccount = false,
+                        url = account.url,
+                        login = account.login,
+                        password = account.password
+                    )
+                    accountData = account
                 }
             }
         }
@@ -46,7 +54,18 @@ class AccountViewModel @Inject constructor(
                 _closeScreen.send(true)
             }
             AccountUiAction.SaveAccount -> viewModelScope.launch(ioDispatcher) {
-                repository.saveAccountData(_uiState.value)
+                val url = _uiState.value.url
+                val login = _uiState.value.login
+                val password = _uiState.value.password
+
+                val newAccountData = accountData?.copy(login = login, password = password)
+                    ?: AccountData(url = url, login = login, password = password)
+
+                repository.saveAccountData(newAccountData)
+                _closeScreen.send(true)
+            }
+            AccountUiAction.DeleteAccount -> viewModelScope.launch(ioDispatcher) {
+                accountData?.id?.let { repository.deleteAccountData(it) }
                 _closeScreen.send(true)
             }
             is AccountUiAction.UpdateWebsite -> viewModelScope.launch(ioDispatcher) {
@@ -61,3 +80,10 @@ class AccountViewModel @Inject constructor(
         }
     }
 }
+
+data class AccountUiState(
+    val isNewAccount: Boolean = true,
+    val url: String = "",
+    val login: String = "",
+    val password: String = ""
+)

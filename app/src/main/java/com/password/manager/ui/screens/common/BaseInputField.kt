@@ -57,7 +57,7 @@ fun BaseInputField(
             unfocusedContainerColor = ExtendedTheme.colors.backSecondary,
         ),
         trailingIcon = {
-            if (parameter == Parameter.PASSWORD) {
+            if (parameter == Parameter.MASTER_PASSWORD) {
                 val icon = if (valueVisibility) {
                     Icons.Filled.Visibility
                 } else {
@@ -72,7 +72,7 @@ fun BaseInputField(
                 }
             }
         },
-        visualTransformation = if (parameter == Parameter.PASSWORD && !valueVisibility) {
+        visualTransformation = if (parameter == Parameter.MASTER_PASSWORD && !valueVisibility) {
             PasswordVisualTransformation()
         } else {
             VisualTransformation.None

@@ -74,8 +74,8 @@ fun MasterPasswordCard(
                 modifier = Modifier.width(IntrinsicSize.Min)
             ) {
                 BaseInputField(
-                    hint = "Master password",
-                    parameter = Parameter.PASSWORD
+                    hint = Parameter.MASTER_PASSWORD.value,
+                    parameter = Parameter.MASTER_PASSWORD
                 ) {
                     onUiAction(StartUiAction.UpdateMasterPassword(it))
                 }

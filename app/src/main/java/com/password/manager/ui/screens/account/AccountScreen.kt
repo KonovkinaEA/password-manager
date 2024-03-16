@@ -1,6 +1,6 @@
 package com.password.manager.ui.screens.account
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,16 +21,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.password.manager.data.model.AccountData
 import com.password.manager.ui.screens.account.components.AccountBaseCard
+import com.password.manager.ui.screens.account.components.AccountsBottomAppBar
 import com.password.manager.ui.screens.account.components.AccountsTopAppBar
+import com.password.manager.ui.screens.account.components.CardContent
 import com.password.manager.ui.screens.account.model.AccountUiAction
-import com.password.manager.ui.screens.common.BaseInputField
 import com.password.manager.ui.screens.common.Parameter
 import com.password.manager.ui.theme.ExtendedTheme
 import com.password.manager.ui.theme.PasswordManagerTheme
 import com.password.manager.ui.theme.ThemeModePreview
-import com.password.manager.ui.util.accounts
 
 @Composable
 fun AccountScreen(onScreenClose: () -> Unit, viewModel: AccountViewModel = hiltViewModel()) {
@@ -44,9 +43,17 @@ fun AccountScreen(onScreenClose: () -> Unit, viewModel: AccountViewModel = hiltV
 }
 
 @Composable
-private fun AccountScreenContent(state: AccountData, onUiAction: (AccountUiAction) -> Unit) {
+private fun AccountScreenContent(state: AccountUiState, onUiAction: (AccountUiAction) -> Unit) {
+    val enableSave =
+        state.url.isNotEmpty() && state.login.isNotEmpty() && state.password.isNotEmpty()
+
     Scaffold(
-        topBar = { AccountsTopAppBar(onUiAction) },
+        topBar = { AccountsTopAppBar(enableSave = enableSave, onUiAction) },
+        bottomBar = {
+            AccountsBottomAppBar(enable = !state.isNewAccount) {
+                onUiAction(AccountUiAction.DeleteAccount)
+            }
+        },
         containerColor = ExtendedTheme.colors.backPrimary
     ) { paddingValues ->
         Column(
@@ -57,22 +64,19 @@ private fun AccountScreenContent(state: AccountData, onUiAction: (AccountUiActio
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AccountBaseCard {
-                CardContent(title = "Website", hint = state.url, parameter = Parameter.WEBSITE) {
-                    onUiAction(AccountUiAction.UpdateWebsite(it))
-                }
-            }
+            WebsitePart(
+                state.isNewAccount,
+                state.url
+            ) { onUiAction(AccountUiAction.UpdateWebsite(it)) }
             Spacer(modifier = Modifier.height(15.dp))
             AccountBaseCard {
-                CardContent(title = "Login", hint = state.login, Parameter.LOGIN) {
+                CardContent(value = state.login, parameter = Parameter.LOGIN) {
                     onUiAction(AccountUiAction.UpdateLogin(it))
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
             AccountBaseCard {
-                CardContent(
-                    title = "Password", hint = state.password, parameter = Parameter.PASSWORD
-                ) {
+                CardContent(value = state.password, parameter = Parameter.PASSWORD) {
                     onUiAction(AccountUiAction.UpdatePassword(it))
                 }
             }
@@ -81,20 +85,21 @@ private fun AccountScreenContent(state: AccountData, onUiAction: (AccountUiActio
 }
 
 @Composable
-private fun CardContent(
-    title: String, hint: String, parameter: Parameter, onValueChanged: (String) -> Unit
-) {
-    Column(
-        modifier = Modifier.padding(15.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(15.dp)
-    ) {
-        Text(
-            text = title, style = MaterialTheme.typography.titleLarge.copy(
-                color = ExtendedTheme.colors.labelPrimary
-            )
-        )
-        BaseInputField(hint = hint, parameter = parameter, onValueChanged = onValueChanged)
+private fun WebsitePart(isNewAccount: Boolean, url: String, updateWebsite: (String) -> Unit) {
+    if (isNewAccount) {
+        AccountBaseCard {
+            CardContent(value = url, parameter = Parameter.WEBSITE) { updateWebsite(it) }
+        }
+    } else {
+        AccountBaseCard {
+            Box(modifier = Modifier.padding(15.dp)) {
+                Text(
+                    text = url, style = MaterialTheme.typography.titleLarge.copy(
+                        color = ExtendedTheme.colors.labelPrimary
+                    )
+                )
+            }
+        }
     }
 }
 
@@ -104,6 +109,6 @@ private fun AccountScreenPreview(
     @PreviewParameter(ThemeModePreview::class) darkTheme: Boolean
 ) {
     PasswordManagerTheme(darkTheme = darkTheme) {
-        AccountScreenContent(state = accounts.first()) {}
+        AccountScreenContent(state = AccountUiState(false, "url", "login", "password")) {}
     }
 }

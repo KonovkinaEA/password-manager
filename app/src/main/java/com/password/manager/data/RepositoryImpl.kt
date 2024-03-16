@@ -31,17 +31,30 @@ class RepositoryImpl @Inject constructor(private val cryptoManager: CryptoManage
 
     override suspend fun saveAccountData(accountData: AccountData) {
         _accounts.update { current ->
-            current.map {
-                when (it.id) {
-                    accountData.id -> accountData
-                    else -> it
+            val updatedList = current.toMutableList()
+            val existingAccount = updatedList.find { it.id == accountData.id }
+            if (existingAccount != null) {
+                updatedList.replaceAll {
+                    if (it.id == accountData.id) accountData else it
                 }
+            } else {
+                val url = accountData.url
+                val favicon = if (url.endsWith("/")) "favicon.ico" else "/favicon.ico"
+                updatedList.add(accountData.copy(iconUrl = url + favicon))
             }
+            updatedList.toList()
+        }
+    }
+
+    override suspend fun deleteAccountData(id: String) {
+        _accounts.update { current ->
+            current.filter { it.id != id }
         }
     }
 
     private fun hardcodedAccounts() = listOf(
         AccountData(
+            id = "1",
             url = "https://github.com/",
             iconUrl = "https://github.com/favicon.ico",
             login = "login",

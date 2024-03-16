@@ -1,16 +1,10 @@
 package com.password.manager.ui.screens.account.components
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -24,11 +18,10 @@ import com.password.manager.ui.theme.ExtendedTheme
 import com.password.manager.ui.theme.Green
 import com.password.manager.ui.theme.PasswordManagerTheme
 import com.password.manager.ui.theme.ThemeModePreview
-import com.password.manager.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountsTopAppBar(onUiAction: (AccountUiAction) -> Unit) {
+fun AccountsTopAppBar(enableSave: Boolean, onUiAction: (AccountUiAction) -> Unit) {
     TopAppBar(
         modifier = Modifier.shadow(10.dp),
         title = {},
@@ -42,20 +35,11 @@ fun AccountsTopAppBar(onUiAction: (AccountUiAction) -> Unit) {
             }
         },
         actions = {
-            TextButton(
-                onClick = { onUiAction(AccountUiAction.SaveAccount) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Green,
-                    contentColor = White
-                ),
-                shape = RoundedCornerShape(10.dp),
-                modifier = Modifier.padding(horizontal = 5.dp)
-            ) {
-                Text(
-                    text = "Save",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
+            AppBarTextButton(
+                enable = enableSave,
+                text = "Save",
+                containerColor = Green
+            ) { onUiAction(AccountUiAction.SaveAccount) }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = ExtendedTheme.colors.backSecondary
@@ -69,6 +53,6 @@ private fun TopAppBarPreview(
     @PreviewParameter(ThemeModePreview::class) darkTheme: Boolean
 ) {
     PasswordManagerTheme(darkTheme = darkTheme) {
-        AccountsTopAppBar(onUiAction = {})
+        AccountsTopAppBar(enableSave = true) {}
     }
 }

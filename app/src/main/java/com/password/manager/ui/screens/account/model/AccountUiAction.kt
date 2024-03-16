@@ -5,5 +5,6 @@ sealed class AccountUiAction {
     data class UpdateLogin(val login: String) : AccountUiAction()
     data class UpdatePassword(val password: String) : AccountUiAction()
     data object SaveAccount : AccountUiAction()
+    data object DeleteAccount : AccountUiAction()
     data object CloseAccount : AccountUiAction()
 }
