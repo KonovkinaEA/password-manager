@@ -26,6 +26,7 @@ class ListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
+            repository.loadData()
             _uiState.value = repository.accounts.value.map {
                 it.copy(url = cleanUrl(it.url))
             }

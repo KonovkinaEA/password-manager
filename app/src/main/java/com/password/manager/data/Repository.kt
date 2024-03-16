@@ -8,7 +8,8 @@ interface Repository {
     suspend fun isMasterPasswordSet(): Boolean
     suspend fun setMasterPassword(password: String)
     suspend fun isMasterPasswordCorrect(password: String): Boolean
-    suspend fun getAccountData(id: String): AccountData?
-    suspend fun saveAccountData(accountData: AccountData)
-    suspend fun deleteAccountData(id: String)
+    suspend fun loadData()
+    suspend fun getAccount(id: String): AccountData?
+    suspend fun saveAccount(account: AccountData)
+    suspend fun deleteAccount(id: String)
 }

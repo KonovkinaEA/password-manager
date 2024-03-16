@@ -26,7 +26,7 @@ class StartViewModel @Inject constructor(
     val successfulEntry = _successfulEntry.receiveAsFlow()
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             _uiState.update {
                 StartScreenUiState(isMasterPasswordSet = repository.isMasterPasswordSet())
             }

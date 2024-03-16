@@ -35,7 +35,7 @@ class AccountViewModel @Inject constructor(
     init {
         viewModelScope.launch(ioDispatcher) {
             savedStateHandle.get<String>(Account.id)?.let {
-                repository.getAccountData(it)?.let { account ->
+                repository.getAccount(it)?.let { account ->
                     _uiState.value = AccountUiState(
                         isNewAccount = false,
                         url = account.url,
@@ -61,11 +61,11 @@ class AccountViewModel @Inject constructor(
                 val newAccountData = accountData?.copy(login = login, password = password)
                     ?: AccountData(url = url, login = login, password = password)
 
-                repository.saveAccountData(newAccountData)
+                repository.saveAccount(newAccountData)
                 _closeScreen.send(true)
             }
             AccountUiAction.DeleteAccount -> viewModelScope.launch(ioDispatcher) {
-                accountData?.id?.let { repository.deleteAccountData(it) }
+                accountData?.id?.let { repository.deleteAccount(it) }
                 _closeScreen.send(true)
             }
             is AccountUiAction.UpdateWebsite -> viewModelScope.launch(ioDispatcher) {
