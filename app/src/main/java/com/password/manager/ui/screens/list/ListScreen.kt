@@ -31,6 +31,7 @@ import com.password.manager.ui.util.accounts
 fun ListScreen(
     addAccount: () -> Unit,
     editAccount: (String) -> Unit,
+    clearCache: () -> Unit,
     viewModel: ListViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -38,8 +39,9 @@ fun ListScreen(
     LaunchedEffect(Unit) {
         viewModel.uiEvent.collect {
             when (it) {
-                ListUiEvent.NavigateToAddAccount -> addAccount()
                 is ListUiEvent.NavigateToEditAccount -> editAccount(it.id)
+                ListUiEvent.NavigateToAddAccount -> addAccount()
+                ListUiEvent.ClearImageCache -> clearCache()
             }
         }
     }
